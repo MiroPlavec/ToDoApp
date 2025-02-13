@@ -26,4 +26,7 @@ public interface TaskRepository extends Repository<Task, Integer> {
             "SET task_title=:title, task_description=:description, completed=:isCompleted, deadline_date=:deadlineDate, creation_date=:creationDate " +
             "WHERE task_id=:id")
     int update(String title, String description, boolean isCompleted, LocalDate deadlineDate, LocalDate creationDate, int id);
+
+    @Query("SELECT * FROM tasks")
+    Iterable<Task> findAll();
 }

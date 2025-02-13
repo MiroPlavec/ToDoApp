@@ -38,6 +38,11 @@ public class TaskServiceImpl implements TaskService{
         return response;
     }
 
+    @Override
+    public Iterable<Task> getAllTasks() {
+        return taskRepository.findAll();
+    }
+
 
     private int parseId(String id){
         try {

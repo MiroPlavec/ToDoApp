@@ -10,4 +10,6 @@ public interface TaskService {
 
     int updateTask(Task task);
 
+    Iterable<Task> getAllTasks();
+
 }
