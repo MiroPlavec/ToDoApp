@@ -14,6 +14,11 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @GetMapping
+    public ResponseEntity<Iterable<Task>> getAllTasks(){
+        return ResponseEntity.ok(taskService.getAllTasks());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable String id){
         Task task = taskService.getTaskById(id);
