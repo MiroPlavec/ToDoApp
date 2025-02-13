@@ -18,20 +18,28 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Task getTaskById(String id) {
-        int parsedId;
-        try {
-            parsedId = Integer.parseInt(id);
-        }catch (NumberFormatException e){
-            throw new TaskIdParseException("Task id: \"%s\" can not be parsed to Integer".formatted(id));
-        }
+        int parsedId = parseId(id);
         Task task = taskRepository.findById(parsedId);
         return task;
     }
 
     @Override
-    public int deleteTask(Task task) {
-        return 0;
+    public int deleteTask(String id) {
+        int parsedId = parseId(id);
+        int response = taskRepository.delete(parsedId);
+        if(response == 0) throw new TaskNotFoundException("Task with id=%d was not found".formatted(parsedId));
+        return response;
     }
+
+
+    private int parseId(String id){
+        try {
+            return Integer.parseInt(id);
+        }catch (NumberFormatException e){
+            throw new TaskIdParseException("Task with id=%s can not be parsed to Integer".formatted(id));
+        }
+    }
+
 
 
 }

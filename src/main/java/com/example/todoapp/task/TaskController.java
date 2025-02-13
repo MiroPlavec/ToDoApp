@@ -1,5 +1,6 @@
 package com.example.todoapp.task;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,11 @@ public class TaskController {
         taskService.addTask(task);
     }
 
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TaskResponse> deleteTask(@PathVariable String id){
+        int response = taskService.deleteTask(id);
+        TaskResponse taskResponse = new TaskResponse(HttpStatus.OK.value(), "Task with id=%s was successfully removed".formatted(id), null);
+        return ResponseEntity.ok(taskResponse);
+    }
+
 }

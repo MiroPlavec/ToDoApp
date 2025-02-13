@@ -6,6 +6,6 @@ public interface TaskService {
 
     Task getTaskById(String id);
 
-    int deleteTask(Task task);
+    int deleteTask(String id);
 
 }
