@@ -8,4 +8,6 @@ public interface TaskService {
 
     int deleteTask(String id);
 
+    int updateTask(Task task);
+
 }

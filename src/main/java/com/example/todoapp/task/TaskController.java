@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("task")
+@RequestMapping("/task")
 public class TaskController {
 
     private final TaskService taskService;
@@ -30,6 +30,13 @@ public class TaskController {
     public ResponseEntity<TaskResponse> deleteTask(@PathVariable String id){
         int response = taskService.deleteTask(id);
         TaskResponse taskResponse = new TaskResponse(HttpStatus.OK.value(), "Task with id=%s was successfully removed".formatted(id), null);
+        return ResponseEntity.ok(taskResponse);
+    }
+
+    @PutMapping
+    public ResponseEntity<TaskResponse> updateTask(@RequestBody Task task){
+        int response = taskService.updateTask(task);
+        TaskResponse taskResponse = new TaskResponse(HttpStatus.OK.value(), "Task with id=%s was successfully updated".formatted(task.getTaskId()), null);
         return ResponseEntity.ok(taskResponse);
     }
 
