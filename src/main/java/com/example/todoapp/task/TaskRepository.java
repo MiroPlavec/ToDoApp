@@ -16,4 +16,8 @@ public interface TaskRepository extends Repository<Task, Integer> {
 
     @Query("SELECT * FROM tasks WHERE task_id = :id")
     Task findById(int id);
+
+    @Modifying
+    @Query("DELETE FROM tasks WHERE task_id = :id")
+    int delete(int id);
 }
