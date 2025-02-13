@@ -20,4 +20,10 @@ public interface TaskRepository extends Repository<Task, Integer> {
     @Modifying
     @Query("DELETE FROM tasks WHERE task_id = :id")
     int delete(int id);
+
+    @Modifying
+    @Query("UPDATE tasks " +
+            "SET task_title=:title, task_description=:description, completed=:isCompleted, deadline_date=:deadlineDate, creation_date=:creationDate " +
+            "WHERE task_id=:id")
+    int update(String title, String description, boolean isCompleted, LocalDate deadlineDate, LocalDate creationDate, int id);
 }

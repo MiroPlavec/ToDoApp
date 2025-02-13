@@ -31,6 +31,13 @@ public class TaskServiceImpl implements TaskService{
         return response;
     }
 
+    @Override
+    public int updateTask(Task task){
+        int response = taskRepository.update(task.getTitle(), task.getDescription(), task.isCompleted(), task.getDeadlineDate(), task.getCreationDate(), task.getTaskId());
+        if(response == 0) throw new TaskNotFoundException("Nothing to update. Task with id=%d was not found.".formatted(task.getTaskId()));
+        return response;
+    }
+
 
     private int parseId(String id){
         try {

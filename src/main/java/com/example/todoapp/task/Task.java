@@ -6,6 +6,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Table("tasks")
 public class Task {
@@ -30,12 +31,13 @@ public class Task {
     private LocalDate creationDate;
 
     @JsonCreator
-    public Task(String title, String description, boolean isCompleted, LocalDate deadlineDate) {
+    public Task(String title, String description, boolean isCompleted, LocalDate deadlineDate, LocalDate creationDate, int taskId) {
         this.title = title;
         this.description = description;
         this.isCompleted = isCompleted;
         this.deadlineDate = deadlineDate;
-        this.creationDate = LocalDate.now();
+        this.creationDate = Objects.requireNonNullElseGet(creationDate, LocalDate::now);
+        this.taskId = taskId;
     }
 
 
@@ -59,4 +61,7 @@ public class Task {
         return creationDate;
     }
 
+    public int getTaskId() {
+        return taskId;
+    }
 }
