@@ -64,4 +64,12 @@ public class Task {
     public int getTaskId() {
         return taskId;
     }
+
+    public String deadline(){
+        return deadlineDate.toString();
+    }
+
+    public String creation(){
+        return creationDate.toString();
+    }
 }

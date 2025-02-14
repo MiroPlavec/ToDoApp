@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cevalp`s to do</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            gap: 20px;
+        }
+        .task-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            text-align: center;
+            position: relative;
+        }
+        .task-dates {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .task-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #ffc107;
+            color: white;
+        }
+        .complete-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .add-task-btn {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /*window for adding new task*/
+        .addDialog {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .addDialog-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<button class="add-task-btn" onclick="showAddDialog()">Add New Task</button>
+
+
+<div th:each="task: ${tasks}">
+    <div class="task-container">
+        <h2><span th:text="${task.title}"></span></h2>
+        <div class="task-dates">
+            <p><strong>Start Date:</strong> <span th:text="${task.deadline}"></span> </p>
+            <p><strong>End Date:</strong><span th:text="${task.creation}"></span></p>
+        </div>
+        <p><span th:text="${task.description}"></span></p>
+        <div class="task-buttons">
+            <button class="edit-btn">Edit task</button>
+            <button class="complete-btn">Completed</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="addTaskDialog" class="addDialog">
+    <form id="addTaskForm" class="addDialog-content">
+        <h2>Add new task</h2>
+        <label>Title</label>
+        <input name="title" type="text">
+
+        <label>Description</label>
+        <textarea name="description"></textarea>
+
+        <label>Deadline date</label>
+        <input name="deadlineDate" type="date">
+
+        <button type="button" onclick="closeAddDialog()">Close</button>
+        <button type="submit">Create</button>
+    </form>
+</div>
+
+
+<script>
+    function showAddDialog(){
+        document.getElementById("addTaskDialog").style.display = "flex";
+    }
+
+    function closeAddDialog(){
+        document.getElementById("addTaskDialog").style.display = "none";
+    }
+
+    const formEl = document.getElementById("addTaskForm");
+    formEl.addEventListener('submit', event => {
+        event.preventDefault();
+        const formData = new FormData(formEl);
+        const data = Object.fromEntries(formData);
+        console.log(data);
+        fetch("http://localhost:8080/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(() => {
+            closeAddDialog();
+            location.reload();
+        })
+    });
+
+</script>
+
+
+
+</body>
+</html>
