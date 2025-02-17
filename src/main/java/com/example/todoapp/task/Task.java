@@ -64,4 +64,24 @@ public class Task {
     public int getTaskId() {
         return taskId;
     }
+
+    public String deadline(){
+        return deadlineDate.toString();
+    }
+
+    public String creation(){
+        return creationDate.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", isCompleted=" + isCompleted +
+                ", deadlineDate=" + deadlineDate +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }
