@@ -72,4 +72,16 @@ public class Task {
     public String creation(){
         return creationDate.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", isCompleted=" + isCompleted +
+                ", deadlineDate=" + deadlineDate +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }
