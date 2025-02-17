@@ -28,9 +28,7 @@ public class TaskController {
 
     @PostMapping
     public String add(@RequestBody Task task, Model model){
-        //taskService.addTask(task);
-
-        System.out.println(task);
+        taskService.addTask(task);
         List<Task> tasks = (List<Task>) taskService.getAllTasks();
         model.addAttribute("tasks", tasks);
         return "index.html";
