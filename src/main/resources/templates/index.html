@@ -109,7 +109,7 @@
 
 <!-- Task List -->
 <div th:each="task: ${tasks}">
-    <div class="task-container">
+    <div class="task-container" th:id="${task.taskId}">
         <h2><span th:text="${task.title}"></span></h2>
         <div class="task-dates">
             <p><strong>Start Date:</strong> <span th:text="${task.deadline}"></span></p>
@@ -118,7 +118,7 @@
         <p><span th:text="${task.description}"></span></p>
         <div class="task-buttons">
             <button class="edit-btn">Edit Task</button>
-            <button class="complete-btn">Completed</button>
+            <button id="btn" class="complete-btn" th:data-id="${task.taskId}" onclick="completeTask(this)">Completed</button>
         </div>
     </div>
 </div>
@@ -160,7 +160,6 @@
         document.getElementById('titleError').style.display = "none";
         document.getElementById('deadlineError').style.display = "none";
         document.getElementById("addTaskDialog").style.display = "none";
-
     }
 
     // Handle Form Submission
@@ -222,6 +221,20 @@
     document.getElementById('deadlineInput').addEventListener('input', () => {
         document.getElementById('deadlineError').style.display = 'none';
     });
+
+    // Completed task
+    function completeTask(button){
+        const taskId = Number(button.getAttribute("data-id"));
+        console.log(taskId);
+        console.log(typeof taskId);
+        fetch("http://localhost:8080/" + taskId, {
+           method: 'PUT',
+            body: null,
+        });
+
+    }
+
+
 </script>
 
 </body>

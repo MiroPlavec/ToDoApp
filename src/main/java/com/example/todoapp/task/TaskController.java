@@ -2,10 +2,7 @@ package com.example.todoapp.task;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,12 @@ public class TaskController {
         taskService.addTask(task);
         List<Task> tasks = (List<Task>) taskService.getAllTasks();
         model.addAttribute("tasks", tasks);
+        return "index.html";
+    }
+
+    @PutMapping("/{taskId}")
+    public String delete(@PathVariable String taskId){
+        taskService.completeTask(taskId);
         return "index.html";
     }
 

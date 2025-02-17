@@ -29,4 +29,8 @@ public interface TaskRepository extends Repository<Task, Integer> {
 
     @Query("SELECT * FROM tasks")
     Iterable<Task> findAll();
+
+    @Modifying
+    @Query("UPDATE tasks SET completed = true WHERE task_id = :id")
+    int completeTask(int id);
 }

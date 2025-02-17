@@ -43,6 +43,14 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.findAll();
     }
 
+    @Override
+    public int completeTask(String id) {
+        int parsedId = parseId(id);
+        int result = taskRepository.completeTask(parsedId);
+
+        return result;
+    }
+
 
     private int parseId(String id){
         try {
