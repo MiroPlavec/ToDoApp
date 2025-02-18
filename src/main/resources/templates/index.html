@@ -246,6 +246,7 @@
 
     }
 
+    // if title and deadlineDate are not set this function return false, otherwise true
     function checkForm(form){
         const formData = new FormData(form);
         const title = formData.get('title');
@@ -309,17 +310,26 @@
 //        }
 //    });
 //
-//    // Completed task
-//    function completeTask(button){
-//        const taskId = button.dataset.id;
-//        fetch("http://localhost:8080/home/"+taskId, {
-//           method: 'PUT'
-//        }).then(() => location.reload());
-//
-//    }
-//
-//
-//</script>
+    // Completed task
+    function completeTask(button){
+        const taskId = button.dataset.id;
+        fetch("http://localhost:8080/home/"+taskId, {
+           method: 'PUT'
+        }).then(response => {
+            if(!response.ok) throw new Error("Failed to mark task as completed");
+            return response.text();
+        }).then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+        }).catch(error => {
+            alert("Error completing task. Please try again.");
+        });
+
+    }
+
+
+</script>
 
 </body>
 

@@ -31,12 +31,22 @@ public class TaskController {
 
 
     @PutMapping()
-    public String completeTask(@RequestBody Task task, Model model){
+    public String editTask(@RequestBody Task task, Model model){
         taskService.updateTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
+
+    @PutMapping("/{taskId}")
+    public String completeTask(@PathVariable String taskId, Model model){
+        taskService.completeTask(taskId);
+        Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        model.addAttribute("tasks", uncompletedTasks);
+        return "index.html";
+    }
+
+
 
 //    @GetMapping
 //    public ResponseEntity<Iterable<Task>> getAllTasks(){
