@@ -92,6 +92,18 @@
             text-align: center;
         }
 
+        .addDialog-content #dialog-btns{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .addDialog-content button{
+            text-align: center;
+        }
+
+
         /* Error Message Styling */
         .error-message {
             color: red;
@@ -127,7 +139,7 @@
 </div>
 
 <!-- Task Dialog -->
-<div id="addTaskDialog" class="addDialog">
+<div id="addTaskDialog" class="addDialog" data-id="-1">
     <form id="addTaskForm" class="addDialog-content">
         <h2>Add new task</h2>
 
@@ -146,8 +158,11 @@
         <p id="deadlineError" class="error-message">Deadline date is required!</p>
 
         <!-- Form Buttons -->
-        <button type="button" onclick="closeAddDialog()">Close</button>
-        <button id="dialogBtnId" type="submit">Create</button>
+        <div id="dialog-btns">
+            <button type="button" onclick="closeAddDialog()">Close</button>
+            <button id="dialogSubmitBtn" type="submit">Create</button>
+            <button id="dialogEditBtn"  type="button" onclick="editTask()">Edit</button>
+        </div>
     </form>
 </div>
 
@@ -158,6 +173,8 @@
     function showAddDialog() {
         const dialog = document.getElementById("addTaskDialog");
         dialog.querySelector("h2").textContent = "Add new task";
+        dialog.querySelector("#dialogSubmitBtn").style.display = "flex";
+        dialog.querySelector("#dialogEditBtn").style.display = "none";
         dialog.style.display = "flex";
     }
 
@@ -173,7 +190,7 @@
         const dialog = document.getElementById("addTaskDialog");
         dialog.querySelector("h2").textContent = "Edit task";
 
-        // get information from specific div
+        // get information from specific div (specific task)
         const divId = button.dataset.id;
         const taskDiv = document.getElementById(divId);
         const titleText = taskDiv.querySelector("h2").textContent;
@@ -183,18 +200,54 @@
         dialog.querySelector('[name="title"]').value = titleText;
         dialog.querySelector("textarea").value = descriptioText;
         dialog.querySelector('[name="deadlineDate"]').value = deadlineDate.split(":")[1].trim();
-        dialog.querySelector("#dialogBtnId").textContent = "Edit";
+        dialog.dataset.id = divId;
 
-        document.getElementById("addTaskDialog").style.display = "flex";
+        //change create button for edit button
+        dialog.querySelector("#dialogSubmitBtn").style.display = "none";
+        dialog.querySelector("#dialogEditBtn").style.display = "flex";
+
+        dialog.style.display = "flex";
 
     }
 
-    // Handle Form Submission
-    const formEl = document.getElementById("addTaskForm");
-    formEl.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent default form submission
+    // read updated data from form and add ID of task (primary key in my db) with isCompleted=false
+    function editTask(){
+        //get taskId (primary key in my db) from dialog`s data-id
+        const taskId = document.getElementById("addTaskDialog").dataset.id;
+        const formElement = document.getElementById("addTaskForm");
 
-        const formData = new FormData(formEl);
+        if(!checkForm(formElement)){
+            return;
+        }
+
+        const formData = new FormData(formElement);
+        const data = Object.fromEntries(formData.entries());
+
+        // add necessery information for my task object in spring boot app
+        data.taskId = taskId;
+        data.isCompleted = false;
+
+        fetch("http://localhost:8080/home", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(response =>{
+            if(!response.ok) throw new Error("Failed to update task");
+            return response.text();
+        }).then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+        }).catch(error => {
+            alert("Error updating task. Please try again.");
+        });
+
+    }
+
+    function checkForm(form){
+        const formData = new FormData(form);
         const title = formData.get('title');
         const deadlineDate = formData.get('deadlineDate');
 
@@ -217,49 +270,56 @@
 
         // If either title or deadline is empty, stop form submission
         if (!title || !deadlineDate) {
-            return; // Prevent form submission if validation fails
+            return false; // Prevent form submission if validation fails
         }
 
-
-
-        // Prepare data for submission
-        const data = Object.fromEntries(formData);
-
-        try {
-            // Send data to the backend
-            await fetch("http://localhost:8080/home", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            // Close the dialog and reload the page
-            closeAddDialog();
-            location.reload();
-        } catch (error) {
-            console.error("Error submitting form:", error);
-            alert("Failed to add task. Try again later.");
-        }
-    });
-
-    // Live validation: Hide error when user types
-    document.getElementById('deadlineInput').addEventListener('input', () => {
-        document.getElementById('deadlineError').style.display = 'none';
-    });
-
-    // Completed task
-    function completeTask(button){
-        const taskId = button.dataset.id;
-        fetch("http://localhost:8080/home/"+taskId, {
-           method: 'PUT'
-        }).then(() => location.reload());
-
+        return true;
     }
 
-
-</script>
+    // Handle Form Submission
+//    const formEl = document.getElementById("addTaskForm");
+//    formEl.addEventListener('submit', async (event) => {
+//        event.preventDefault(); // Prevent default form submission
+//
+//        const validate = checkForm(formEl);
+//        if(!validate){
+//            return;
+//        }
+//
+//        const formData = new FormData(formEl);
+//        // Prepare data for submission
+//        const data = Object.fromEntries(formData);
+//
+//        try {
+//            // Send data to the backend
+//            await fetch("http://localhost:8080/home", {
+//                method: "POST",
+//                headers: {
+//                    "Content-Type": "application/json"
+//                },
+//                body: JSON.stringify(data)
+//            });
+//
+//            // Close the dialog and reload the page
+//            closeAddDialog();
+//            location.reload();
+//        } catch (error) {
+//            console.error("Error submitting form:", error);
+//            alert("Failed to add task. Try again later.");
+//        }
+//    });
+//
+//    // Completed task
+//    function completeTask(button){
+//        const taskId = button.dataset.id;
+//        fetch("http://localhost:8080/home/"+taskId, {
+//           method: 'PUT'
+//        }).then(() => location.reload());
+//
+//    }
+//
+//
+//</script>
 
 </body>
 

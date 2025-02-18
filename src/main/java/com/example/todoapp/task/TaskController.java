@@ -30,9 +30,9 @@ public class TaskController {
     }
 
 
-    @PutMapping("/{taskId}")
-    public String completeTask(@PathVariable String taskId, Model model){
-        taskService.completeTask(taskId);
+    @PutMapping()
+    public String completeTask(@RequestBody Task task, Model model){
+        taskService.updateTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
