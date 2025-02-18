@@ -14,4 +14,8 @@ public interface TaskService {
 
     int completeTask(String id);
 
+    Iterable<Task> getCompletedTasks();
+
+    Iterable<Task> getUncompletedTasks();
+
 }

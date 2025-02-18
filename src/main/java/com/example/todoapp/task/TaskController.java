@@ -4,10 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
-@RequestMapping("/")
+@RequestMapping("/home")
 public class TaskController {
 
     private final TaskService taskService;
@@ -18,22 +16,25 @@ public class TaskController {
 
     @GetMapping
     public String home(Model model){
-        List<Task> tasks = (List<Task>) taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
+        Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
 
     @PostMapping
     public String add(@RequestBody Task task, Model model){
         taskService.addTask(task);
-        List<Task> tasks = (List<Task>) taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
+        Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
 
+
     @PutMapping("/{taskId}")
-    public String delete(@PathVariable String taskId){
+    public String completeTask(@PathVariable String taskId, Model model){
         taskService.completeTask(taskId);
+        Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
 

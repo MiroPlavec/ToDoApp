@@ -51,6 +51,16 @@ public class TaskServiceImpl implements TaskService{
         return result;
     }
 
+    @Override
+    public Iterable<Task> getCompletedTasks() {
+        return taskRepository.findCompletedTask();
+    }
+
+    @Override
+    public Iterable<Task> getUncompletedTasks() {
+        return taskRepository.findUncompletedTasks();
+    }
+
 
     private int parseId(String id){
         try {

@@ -33,4 +33,10 @@ public interface TaskRepository extends Repository<Task, Integer> {
     @Modifying
     @Query("UPDATE tasks SET completed = true WHERE task_id = :id")
     int completeTask(int id);
+
+    @Query("SELECT * FROM tasks WHERE completed = true")
+    Iterable<Task> findCompletedTask();
+
+    @Query("SELECT * FROM tasks WHERE completed = false")
+    Iterable<Task> findUncompletedTasks();
 }

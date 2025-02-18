@@ -200,7 +200,7 @@
 
         try {
             // Send data to the backend
-            await fetch("http://localhost:8080/", {
+            await fetch("http://localhost:8080/home", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -224,13 +224,10 @@
 
     // Completed task
     function completeTask(button){
-        const taskId = Number(button.getAttribute("data-id"));
-        console.log(taskId);
-        console.log(typeof taskId);
-        fetch("http://localhost:8080/" + taskId, {
-           method: 'PUT',
-            body: null,
-        });
+        const taskId = button.dataset.id;
+        fetch("http://localhost:8080/home/"+taskId, {
+           method: 'PUT'
+        }).then(() => location.reload());
 
     }
 
