@@ -17,15 +17,18 @@ public class TaskController {
     @GetMapping
     public String home(Model model){
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        taskService.sort(uncompletedTasks);
+
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
 
     @PostMapping
     public String add(@RequestBody Task task, Model model){
-        System.out.println(task);
         taskService.addTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        taskService.sort(uncompletedTasks);
+
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
@@ -35,6 +38,8 @@ public class TaskController {
     public String editTask(@RequestBody Task task, Model model){
         taskService.updateTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        taskService.sort(uncompletedTasks);
+
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
@@ -43,41 +48,10 @@ public class TaskController {
     public String completeTask(@PathVariable String taskId, Model model){
         taskService.completeTask(taskId);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        taskService.sort(uncompletedTasks);
+
         model.addAttribute("tasks", uncompletedTasks);
         return "index.html";
     }
-
-
-
-//    @GetMapping
-//    public ResponseEntity<Iterable<Task>> getAllTasks(){
-//        return ResponseEntity.ok(taskService.getAllTasks());
-//    }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Task> getTask(@PathVariable String id){
-//        Task task = taskService.getTaskById(id);
-//
-//        return ResponseEntity.ok(task);
-//    }
-//
-//    @PostMapping
-//    public void addTask(@RequestBody Task task){
-//        taskService.addTask(task);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<TaskResponse> deleteTask(@PathVariable String id){
-//        int response = taskService.deleteTask(id);
-//        TaskResponse taskResponse = new TaskResponse(HttpStatus.OK.value(), "Task with id=%s was successfully removed".formatted(id), null);
-//        return ResponseEntity.ok(taskResponse);
-//    }
-//
-//    @PutMapping
-//    public ResponseEntity<TaskResponse> updateTask(@RequestBody Task task){
-//        int response = taskService.updateTask(task);
-//        TaskResponse taskResponse = new TaskResponse(HttpStatus.OK.value(), "Task with id=%s was successfully updated".formatted(task.getTaskId()), null);
-//        return ResponseEntity.ok(taskResponse);
-//    }
 
 }

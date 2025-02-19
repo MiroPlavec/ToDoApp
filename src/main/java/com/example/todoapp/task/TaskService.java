@@ -18,4 +18,6 @@ public interface TaskService {
 
     Iterable<Task> getUncompletedTasks();
 
+    void sort(Iterable<Task> tasks);
+
 }

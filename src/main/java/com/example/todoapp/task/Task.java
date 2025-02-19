@@ -6,10 +6,11 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Table("tasks")
-public class Task {
+public class Task implements Comparable<Task>{
 
     @Id
     @Column("task_id")
@@ -66,7 +67,8 @@ public class Task {
     }
 
     public String deadline(){
-        return deadlineDate.toString();
+        String transformedDate = deadlineDate.format(DateTimeFormatter.ofPattern("d.MM.uuuu"));
+        return transformedDate;
     }
 
     public String creation(){
@@ -83,5 +85,12 @@ public class Task {
                 ", deadlineDate=" + deadlineDate +
                 ", creationDate=" + creationDate +
                 '}';
+    }
+
+    // compare two deadline which one is sooner
+    @Override
+    public int compareTo(Task o) {
+        if(this.deadlineDate.isEqual(o.deadlineDate)) return 0;
+        return (this.deadlineDate.isAfter(o.getDeadlineDate())) ? 1: -1;
     }
 }

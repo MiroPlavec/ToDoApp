@@ -2,6 +2,9 @@ package com.example.todoapp.task;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class TaskServiceImpl implements TaskService{
 
@@ -61,6 +64,10 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.findUncompletedTasks();
     }
 
+    @Override
+    public void sort(Iterable<Task> tasks){
+        Collections.sort((List) tasks);
+    }
 
     private int parseId(String id){
         try {

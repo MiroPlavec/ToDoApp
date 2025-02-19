@@ -145,19 +145,16 @@ async function submitForm(){
 }
 
 // Completed task
-function completeTask(button){
+async function completeTask(button){
     const taskId = button.dataset.id;
-    fetch("http://localhost:8080/home/"+taskId, {
-        method: 'PUT'
-    }).then(response => {
-        if(!response.ok) throw new Error("Failed to mark task as completed");
-        return response.text();
-    }).then(html => {
+    try{
+        const response = await fetch("http://localhost:8080/home/"+taskId, {method: 'PUT'});
         document.open();
-        document.write(html);
+        document.write(await response.text());
         document.close();
-    }).catch(error => {
-        alert("Error completing task. Please try again.");
-    });
+    }catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Failed to add task. Try again later.");
+    }
 
 }
