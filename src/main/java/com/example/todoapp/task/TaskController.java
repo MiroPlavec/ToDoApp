@@ -54,4 +54,14 @@ public class TaskController {
         return "index.html";
     }
 
+    @DeleteMapping("/{taskId}")
+    public String deleteTask(@PathVariable String taskId, Model model){
+        taskService.deleteTask(taskId);
+        Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
+        taskService.sort(uncompletedTasks);
+
+        model.addAttribute("tasks", uncompletedTasks);
+        return "index.html";
+    }
+
 }

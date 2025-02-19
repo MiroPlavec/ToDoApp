@@ -158,3 +158,27 @@ async function completeTask(button){
     }
 
 }
+
+
+// taskId for removing task is stored becouse before task is removed a confirm window is showed to the user
+let currentTaskId = null;
+function openConfirmDialog(button){
+    currentTaskId = button.dataset.id;
+    document.getElementById("confirmRemoveDialog").style.display = "flex";
+}
+
+async function removeTask(){
+    try{
+        const response = await fetch("http://localhost:8080/home/"+currentTaskId, {method: 'DELETE'});
+        document.open();
+        document.write(await response.text());
+        document.close();
+    }catch (error) {
+        console.error("Error deleting task:", error);
+        alert("Failed to delete task. Try again later.");
+    }
+}
+
+function closeConfirmDialog(){
+    document.getElementById("confirmRemoveDialog").style.display = "none";
+}

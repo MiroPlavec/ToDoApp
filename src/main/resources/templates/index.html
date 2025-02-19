@@ -17,7 +17,11 @@
 <!-- Task List -->
 <div th:each="task: ${tasks}">
     <div class="task-container" th:id="${task.taskId}">
-        <h2><span th:text="${task.title}"></span></h2>
+
+        <div class="task-header">
+            <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmDialog(this)">✖</button>
+            <h2 class="task-title"><span th:text="${task.title}"></span></h2>
+        </div>
 
         <div class="task-dates">
             <p id="deadlineId"><strong>Deadline: </strong><span th:text="${task.deadline}"></span></p>
@@ -60,6 +64,15 @@
     </form>
 </div>
 
+
+<!-- Confirm Dialog -->
+<div id="confirmRemoveDialog" class="confirmDialog">
+    <div class="confirmDialog-content">
+        <p>Are you sure you want to remove this task?</p>
+        <button id="confirmRemoveBtn" onclick="removeTask()">Yes, Remove</button>
+        <button id="cancelRemoveBtn" onclick="closeConfirmDialog()">Cancel</button>
+    </div>
+</div>
 
 <script th:src="@{/jsp/index.js}"></script>
 </body>
