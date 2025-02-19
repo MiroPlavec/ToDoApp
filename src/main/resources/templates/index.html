@@ -160,7 +160,7 @@
         <!-- Form Buttons -->
         <div id="dialog-btns">
             <button type="button" onclick="closeAddDialog()">Close</button>
-            <button id="dialogSubmitBtn" type="submit">Create</button>
+            <button id="dialogSubmitBtn" type="button" onclick="submitForm()">Create</button>
             <button id="dialogEditBtn"  type="button" onclick="editTask()">Edit</button>
         </div>
     </form>
@@ -277,39 +277,46 @@
         return true;
     }
 
-    // Handle Form Submission
-//    const formEl = document.getElementById("addTaskForm");
-//    formEl.addEventListener('submit', async (event) => {
-//        event.preventDefault(); // Prevent default form submission
-//
-//        const validate = checkForm(formEl);
-//        if(!validate){
-//            return;
-//        }
-//
-//        const formData = new FormData(formEl);
-//        // Prepare data for submission
-//        const data = Object.fromEntries(formData);
-//
-//        try {
-//            // Send data to the backend
-//            await fetch("http://localhost:8080/home", {
-//                method: "POST",
-//                headers: {
-//                    "Content-Type": "application/json"
-//                },
-//                body: JSON.stringify(data)
-//            });
-//
-//            // Close the dialog and reload the page
-//            closeAddDialog();
-//            location.reload();
-//        } catch (error) {
-//            console.error("Error submitting form:", error);
-//            alert("Failed to add task. Try again later.");
-//        }
-//    });
-//
+    async function submitForm(){
+
+        const formEl = document.getElementById("addTaskForm");
+        if(!formEl){
+            console.error("Form element not found");
+            return;
+        }
+
+        const validate = checkForm(formEl);
+        if(!validate){
+            return;
+        }
+
+        const formData = new FormData(formEl);
+        // Prepare data for submission
+        const data = Object.fromEntries(formData.entries());
+
+        // add necessery information for my task object in spring boot app
+        data.isCompleted = false;
+
+        try {
+            // Send data to the backend
+            const response = await fetch("http://localhost:8080/home", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            document.open();
+            document.write(await response.text());
+            document.close();
+
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("Failed to add task. Try again later.");
+        }
+    }
+
     // Completed task
     function completeTask(button){
         const taskId = button.dataset.id;

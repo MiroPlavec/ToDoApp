@@ -23,6 +23,7 @@ public class TaskController {
 
     @PostMapping
     public String add(@RequestBody Task task, Model model){
+        System.out.println(task);
         taskService.addTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
         model.addAttribute("tasks", uncompletedTasks);
@@ -30,7 +31,7 @@ public class TaskController {
     }
 
 
-    @PutMapping()
+    @PutMapping
     public String editTask(@RequestBody Task task, Model model){
         taskService.updateTask(task);
         Iterable<Task> uncompletedTasks = taskService.getUncompletedTasks();
