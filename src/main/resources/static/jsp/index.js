@@ -62,9 +62,9 @@ async function editTask(){
             },
             body: JSON.stringify(data)
         });
-        document.open();
-        document.write(await response.text());
-        document.close();
+        const html = await response.text();
+        document.body.innerHTML = html;
+        document.dispatchEvent(new Event("HTMLSwapped"));
 
     }catch (error){
         console.error("Error submitting form:", error);
@@ -83,16 +83,26 @@ function checkFormData(formData){
 
     // Validate title (must not be empty)
     if (!title) {
-        titleError.style.display = "block"; // Show error if title is empty
+        titleError.style.display = "block";
     } else {
-        titleError.style.display = "none"; // Hide error if title is filled
+        titleError.style.display = "none";
     }
 
     // Validate deadline date (must not be empty)
     if (!deadlineDate) {
         deadlineError.style.display = "block"; // Show error if deadline is empty
     } else {
-        deadlineError.style.display = "none"; // Hide error if deadline is filled
+        const today = new Date().setHours(0, 0, 0, 0);
+        const inputDate = new Date(deadlineDate).setHours(0, 0, 0, 0);
+
+        // Validate if selected deadline is not in the past
+        if(today > inputDate){
+            deadlineError.style.display = "block";
+            deadlineError.textContent = "Deadline can not be int the past.";
+            return false;
+        }else{
+            deadlineError.style.display = "none"; // Hide error if deadline is filled
+        }
     }
 
     // If either title or deadline is empty, stop form submission
@@ -133,10 +143,9 @@ async function submitForm(){
             },
             body: JSON.stringify(data)
         });
-
-        document.open();
-        document.write(await response.text());
-        document.close();
+        const html = await response.text();
+        document.body.innerHTML = html;
+        document.dispatchEvent(new Event("HTMLSwapped"));
 
     } catch (error) {
         console.error("Error submitting form:", error);
@@ -149,30 +158,33 @@ async function completeTask(button){
     const taskId = button.dataset.id;
     try{
         const response = await fetch("http://localhost:8080/home/"+taskId, {method: 'PUT'});
-        document.open();
-        document.write(await response.text());
-        document.close();
+
+        const html = await response.text();
+        document.body.innerHTML = html;
+        document.dispatchEvent(new Event("HTMLSwapped"));
     }catch (error) {
         console.error("Error submitting form:", error);
         alert("Failed to add task. Try again later.");
     }
-
 }
 
 
 // taskId for removing task is stored becouse before task is removed a confirm window is showed to the user
-let currentTaskId = null;
+//let currentTaskId = null;
 function openConfirmDialog(button){
-    currentTaskId = button.dataset.id;
+    //currentTaskId = button.dataset.id;
+    document.getElementById("confirmRemoveDialog").dataset.taskId = button.dataset.id;
     document.getElementById("confirmRemoveDialog").style.display = "flex";
 }
 
 async function removeTask(){
     try{
-        const response = await fetch("http://localhost:8080/home/"+currentTaskId, {method: 'DELETE'});
-        document.open();
-        document.write(await response.text());
-        document.close();
+        const taskId = document.getElementById("confirmRemoveDialog").dataset.taskId;
+        const response = await fetch("http://localhost:8080/home/"+taskId, {method: 'DELETE'});
+
+        const html = await response.text();
+        document.body.innerHTML = html;
+        document.dispatchEvent(new Event("HTMLSwapped"));
     }catch (error) {
         console.error("Error deleting task:", error);
         alert("Failed to delete task. Try again later.");
@@ -182,3 +194,24 @@ async function removeTask(){
 function closeConfirmDialog(){
     document.getElementById("confirmRemoveDialog").style.display = "none";
 }
+
+
+document.addEventListener('HTMLSwapped', () => {
+    const taskContainers = document.querySelectorAll('.task-container');
+    taskContainers.forEach(task => {
+        const isAfterDeadline = task.getAttribute('data-afterDeadline');
+        if(isAfterDeadline === "true"){
+            task.style.backgroundColor = "#ffcccc";
+            const taskTitle = task.querySelector(".task-title").textContent;
+            task.querySelector(".task-title").textContent = taskTitle + " (After deadline)";
+            const taskButtons = task.querySelector(".task-buttons");
+            if(taskButtons){
+                taskButtons.style.display = "none";
+            }
+        }
+    });
+})
+
+document.addEventListener('DOMContentLoaded', () =>{
+    document.dispatchEvent(new Event("HTMLSwapped"));
+})

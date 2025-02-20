@@ -15,8 +15,8 @@
 <button class="add-task-btn" onclick="showAddDialog()">Add New Task</button>
 
 <!-- Task List -->
-<div th:each="task: ${tasks}">
-    <div class="task-container" th:id="${task.taskId}">
+<div th:each="task: ${tasks}" id="taskList">
+    <div class="task-container" th:id="${task.taskId}" th:data-afterDeadline="${task.isAfterDeadline}">
 
         <div class="task-header">
             <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmDialog(this)">✖</button>
@@ -66,7 +66,7 @@
 
 
 <!-- Confirm Dialog -->
-<div id="confirmRemoveDialog" class="confirmDialog">
+<div id="confirmRemoveDialog" class="confirmDialog" data-taskId="">
     <div class="confirmDialog-content">
         <p>Are you sure you want to remove this task?</p>
         <button id="confirmRemoveBtn" onclick="removeTask()">Yes, Remove</button>

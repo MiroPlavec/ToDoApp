@@ -2,7 +2,9 @@ package com.example.todoapp.task;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -16,7 +18,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public void addTask(Task task) {
-        taskRepository.save(task.getTitle(), task.getDescription(), task.isCompleted(), task.getDeadlineDate(), task.getCreationDate());
+        taskRepository.save(task.getTitle(), task.getDescription(), task.isCompleted(), task.isAfterDeadline(), task.getDeadlineDate());
     }
 
     @Override
@@ -36,7 +38,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public int updateTask(Task task){
-        int response = taskRepository.update(task.getTitle(), task.getDescription(), task.isCompleted(), task.getDeadlineDate(), task.getCreationDate(), task.getTaskId());
+        int response = taskRepository.update(task.getTitle(), task.getDescription(), task.isCompleted(), task.isAfterDeadline(), task.getDeadlineDate(), task.getTaskId());
         if(response == 0) throw new TaskNotFoundException("Nothing to update. Task with id=%d was not found.".formatted(task.getTaskId()));
         return response;
     }
@@ -64,9 +66,30 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.findUncompletedTasks();
     }
 
+    // first before deadline, than after deadline;
     @Override
     public void sort(Iterable<Task> tasks){
-        Collections.sort((List) tasks);
+        List<Task> afterDeadlineTasks = new ArrayList<>();
+        List<Task> beforeDeadlineTasks = (List<Task>) tasks;
+
+        Iterator<Task> taskIterator = beforeDeadlineTasks.iterator();
+        while (taskIterator.hasNext()){
+            Task task = taskIterator.next();
+            if(task.isAfterDeadline()){
+                afterDeadlineTasks.add(task);
+                taskIterator.remove();
+            }
+        }
+
+        Comparator<Task> comparator = (t1, t2) -> {
+            if(t1.getDeadlineDate().isEqual(t2.getDeadlineDate())) return 0;
+            if(t1.getDeadlineDate().isAfter(t2.getDeadlineDate())) return 1;
+            return -1;
+        };
+        afterDeadlineTasks.sort(comparator);
+        beforeDeadlineTasks.sort(comparator);
+
+        beforeDeadlineTasks.addAll(afterDeadlineTasks);
     }
 
     private int parseId(String id){

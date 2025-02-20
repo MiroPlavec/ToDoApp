@@ -7,7 +7,6 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 @Table("tasks")
 public class Task implements Comparable<Task>{
@@ -25,22 +24,21 @@ public class Task implements Comparable<Task>{
     @Column("completed")
     private boolean isCompleted;
 
+    @Column("after_deadline")
+    private boolean isAfterDeadline;
+
     @Column("deadline_date")
     private LocalDate deadlineDate;
 
-    @Column("creation_date")
-    private LocalDate creationDate;
-
     @JsonCreator
-    public Task(String title, String description, boolean isCompleted, LocalDate deadlineDate, LocalDate creationDate, int taskId) {
+    public Task(String title, String description, boolean isCompleted, boolean isAfterDeadline, LocalDate deadlineDate, int taskId) {
         this.title = title;
         this.description = description;
         this.isCompleted = isCompleted;
+        this.isAfterDeadline = isAfterDeadline;
         this.deadlineDate = deadlineDate;
-        this.creationDate = Objects.requireNonNullElseGet(creationDate, LocalDate::now);
         this.taskId = taskId;
     }
-
 
     public String getTitle() {
         return title;
@@ -54,12 +52,12 @@ public class Task implements Comparable<Task>{
         return isCompleted;
     }
 
-    public LocalDate getDeadlineDate() {
-        return deadlineDate;
+    public boolean isAfterDeadline() {
+        return isAfterDeadline;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
+    public LocalDate getDeadlineDate() {
+        return deadlineDate;
     }
 
     public int getTaskId() {
@@ -71,10 +69,6 @@ public class Task implements Comparable<Task>{
         return transformedDate;
     }
 
-    public String creation(){
-        return creationDate.toString();
-    }
-
     @Override
     public String toString() {
         return "Task{" +
@@ -83,7 +77,6 @@ public class Task implements Comparable<Task>{
                 ", description='" + description + '\'' +
                 ", isCompleted=" + isCompleted +
                 ", deadlineDate=" + deadlineDate +
-                ", creationDate=" + creationDate +
                 '}';
     }
 
