@@ -55,7 +55,7 @@ async function editTask(){
     data.isCompleted = false;
 
     try {
-        const response = await fetch("http://localhost:8080/home", {
+        const response = await fetch("/home", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -136,7 +136,7 @@ async function submitForm(){
     data.isCompleted = false;
 
     try {
-        const response = await fetch("http://localhost:8080/home", {
+        const response = await fetch("/home", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -157,7 +157,7 @@ async function submitForm(){
 async function completeTask(button){
     const taskId = button.dataset.id;
     try{
-        const response = await fetch("http://localhost:8080/home/"+taskId, {method: 'PUT'});
+        const response = await fetch("/home/"+taskId, {method: 'PUT'});
 
         const html = await response.text();
         document.body.innerHTML = html;
@@ -180,7 +180,7 @@ function openConfirmDialog(button){
 async function removeTask(){
     try{
         const taskId = document.getElementById("confirmRemoveDialog").dataset.taskId;
-        const response = await fetch("http://localhost:8080/home/"+taskId, {method: 'DELETE'});
+        const response = await fetch("/home/"+taskId, {method: 'DELETE'});
 
         const html = await response.text();
         document.body.innerHTML = html;
