@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/tasks")
 public class TaskController {
 
     private final TaskService taskService;

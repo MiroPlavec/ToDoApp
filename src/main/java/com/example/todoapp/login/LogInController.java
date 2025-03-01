@@ -19,7 +19,7 @@ public class LogInController {
     @GetMapping
     public String showLogInScreen(){
         if(logInService.isLogged()){
-            return "redirect:/home";
+            return "redirect:/tasks";
         }
         return "login.html";
     }
@@ -28,7 +28,7 @@ public class LogInController {
     public String logIn(@RequestBody LoginRequest loginRequest){
         boolean isLogged = logInService.logIn(loginRequest.getUsername(), loginRequest.getPassword());
         if(isLogged){
-            return "redirect:/home";
+            return "redirect:/tasks";
         }
         return "login.html";
     }
