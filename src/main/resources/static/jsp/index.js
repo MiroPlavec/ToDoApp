@@ -100,7 +100,7 @@ function checkFormData(formData){
         // Validate if selected deadline is not in the past
         if(today > inputDate){
             deadlineError.style.display = "block";
-            deadlineError.textContent = "Deadline can not be int the past.";
+            deadlineError.textContent = "A past date cannot be used as a deadline.";
             return false;
         }else{
             deadlineError.style.display = "none"; // Hide error if deadline is filled

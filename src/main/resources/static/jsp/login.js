@@ -1,3 +1,7 @@
+const protocol = window.location.protocol;
+const host = window.location.host;
+
+
 async function sendUserData(){
     const formEl = document.getElementById("form");
     const formData = new FormData(formEl);
@@ -5,17 +9,23 @@ async function sendUserData(){
     const password = formData.get("password");
 
     const data = Object.fromEntries(formData.entries());
+
     try {
-        const response = await fetch("", {
+        const response = await fetch("/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         });
-        location.reload();
+
+        const result = await response.json();
+        if(response.ok && result.redirect){
+            window.location.href = result.redirect;
+        }else{
+            alert(result.redirect);
+        }
     } catch (error) {
-        console.error("Error submitting form:", error);
-        alert("Failed to add task. Try again later.");
+        console.error("Error submitting login information:", error);
     }
 }

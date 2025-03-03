@@ -1,5 +1,6 @@
 package com.example.todoapp.login;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -8,8 +9,12 @@ import org.springframework.web.context.annotation.SessionScope;
 public class LogInService {
 
     private boolean isLogged = false;
-    private final String username = "root";
-    private final String password = "root";
+
+    @Value("${custom.login.username}")
+    private String username;
+
+    @Value("${custom.login.password}")
+    private String password;
 
 
     public boolean logIn(String username, String password){
