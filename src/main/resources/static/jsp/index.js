@@ -157,7 +157,7 @@ async function submitForm(){
 
 // Completed task
 async function completeTask(button){
-    const taskId = button.dataset.id;
+    const taskId = document.getElementById("confirmCompleteDialog").dataset.taskId;
     try{
         const response = await fetch(url + "/" +taskId, {method: 'PUT'});
 
@@ -168,15 +168,6 @@ async function completeTask(button){
         console.error("Error submitting form:", error);
         alert("Failed to add task. Try again later.");
     }
-}
-
-
-// taskId for removing task is stored becouse before task is removed a confirm window is showed to the user
-//let currentTaskId = null;
-function openConfirmDialog(button){
-    //currentTaskId = button.dataset.id;
-    document.getElementById("confirmRemoveDialog").dataset.taskId = button.dataset.id;
-    document.getElementById("confirmRemoveDialog").style.display = "flex";
 }
 
 async function removeTask(){
@@ -193,8 +184,23 @@ async function removeTask(){
     }
 }
 
-function closeConfirmDialog(){
+
+function openConfirmRemoveDialog(button){
+    document.getElementById("confirmRemoveDialog").dataset.taskId = button.dataset.id;
+    document.getElementById("confirmRemoveDialog").style.display = "flex";
+}
+
+function openConfirmCompleteDialog(button){
+    document.getElementById("confirmCompleteDialog").dataset.taskId = button.dataset.id;
+    document.getElementById("confirmCompleteDialog").style.display = "flex";
+}
+
+function closeConfirmRemoveDialog(){
     document.getElementById("confirmRemoveDialog").style.display = "none";
+}
+
+function closeConfirmCompleteDialog(){
+    document.getElementById("confirmCompleteDialog").style.display = "none";
 }
 
 

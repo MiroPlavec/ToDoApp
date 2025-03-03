@@ -18,7 +18,7 @@
     <div class="task-container" th:id="${task.taskId}" th:data-afterDeadline="${task.isAfterDeadline}">
 
         <div class="task-header">
-            <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmDialog(this)">✖</button>
+            <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmRemoveDialog(this)">✖</button>
             <h2 class="task-title"><span th:text="${task.title}"></span></h2>
         </div>
 
@@ -30,12 +30,12 @@
 
         <div class="task-buttons">
             <button class="edit-btn" th:data-id="${task.taskId}" onclick="showEditDialog(this)">Edit Task</button>
-            <button id="btn" class="complete-btn" th:data-id="${task.taskId}" onclick="completeTask(this)">Completed</button>
+            <button id="btn" class="complete-btn" th:data-id="${task.taskId}" onclick="openConfirmCompleteDialog(this)">Completed</button>
         </div>
     </div>
 </div>
 
-<!-- Task Dialog -->
+<!-- Create Task Dialog -->
 <div id="addTaskDialog" class="addDialog" data-id="-1">
     <form id="addTaskForm" class="addDialog-content">
         <h2>Add new task</h2>
@@ -64,12 +64,21 @@
 </div>
 
 
-<!-- Confirm Dialog -->
+<!-- Confirm Remove Dialog -->
 <div id="confirmRemoveDialog" class="confirmDialog" data-taskId="">
     <div class="confirmDialog-content">
-        <p>Are you sure you want to remove this task?</p>
-        <button id="confirmRemoveBtn" onclick="removeTask()">Yes, Remove</button>
-        <button id="cancelRemoveBtn" onclick="closeConfirmDialog()">Cancel</button>
+        <p>Are you sure you want to remove this task ?</p>
+        <button id="confirmRemoveBtn" onclick="removeTask()">Remove</button>
+        <button id="cancelRemoveBtn" onclick="closeConfirmRemoveDialog()">Cancel</button>
+    </div>
+</div>
+
+<!-- Confirm Completed Dialog -->
+<div id="confirmCompleteDialog" class="confirmDialog" data-taskId="">
+    <div class="confirmDialog-content">
+        <p>Are you sure you want to mark this task as completed ?</p>
+        <button id="confirmCompleteBtn" onclick="completeTask()">Complete</button>
+        <button id="cancelCompleteBtn" onclick="closeConfirmCompleteDialog()">Cancel</button>
     </div>
 </div>
 
