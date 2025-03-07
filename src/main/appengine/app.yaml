@@ -1,7 +1,10 @@
 runtime: java17
 instance_class: F1
 
-handlers:
-  - url: /.*
-    script: auto
-    secure: always  # Forces HTTPS
+automatic_scaling:
+  min_idle_instances: 1
+
+#handlers:
+#  - url: /.*
+#    script: auto
+#    secure: always  # Forces HTTPS

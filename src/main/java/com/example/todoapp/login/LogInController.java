@@ -22,6 +22,7 @@ public class LogInController {
 
     @GetMapping
     public String showLogInScreen(){
+        //throw new MyException("Pokus");
         if(logInService.isLogged()){
             return "redirect:/tasks";
         }
