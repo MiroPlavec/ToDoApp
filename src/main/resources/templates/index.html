@@ -10,15 +10,23 @@
 
 <body>
 
+<div class="sidebar" id="sidebar">
+    <a href="/tasks">All tasks</a>
+    <a href="/cart2">Completed tasks</a>
+    <a href="/cart3">Uncompleted tasks</a>
+    <a href="/cart4">After deadline tasks</a>
+</div>
+
+
 <!-- Add Task Button -->
-<button class="add-task-btn" onclick="showAddDialog()">Add New Task</button>
+<button class="add-task-btn" title="Add new task" onclick="showAddDialog()">+</button>
 
 <!-- Task List -->
 <div th:each="task: ${tasks}" id="taskList">
     <div class="task-container" th:id="${task.taskId}" th:data-afterDeadline="${task.isAfterDeadline}">
 
+        <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmRemoveDialog(this)">✖</button>
         <div class="task-header">
-            <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmRemoveDialog(this)">✖</button>
             <h2 class="task-title"><span th:text="${task.title}"></span></h2>
         </div>
 
