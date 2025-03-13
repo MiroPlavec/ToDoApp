@@ -223,10 +223,3 @@ document.addEventListener('HTMLSwapped', () => {
 document.addEventListener('DOMContentLoaded', () =>{
     document.dispatchEvent(new Event("HTMLSwapped"));
 })
-
-// for side bar
-//document.getElementById("toggleSidebar").addEventListener("click", function() {
-//    const sidebar = document.getElementById("sidebar");
-//    sidebar.classList.toggle("hidden");
-//    this.innerHTML = sidebar.classList.contains("hidden") ? "&rarr;" : "&larr;";
-//});

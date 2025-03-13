@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do it ! Completed Tasks</title>
+  <link rel="stylesheet" th:href="@{/css/comptasks.css}">
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+  <a href="/tasks">All tasks</a>
+  <a href="/comptasks">Completed tasks</a>
+  <a href="/cart3">Uncompleted tasks</a>
+  <a href="/cart4">After deadline tasks</a>
+</div>
+
+
+<!-- Task List -->
+<div th:each="task: ${tasks}" id="taskList">
+  <div class="task-container" th:id="${task.taskId}" th:data-afterDeadline="${task.isAfterDeadline}">
+
+    <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmRemoveDialog(this)">✖</button>
+
+    <div class="task-header">
+      <h2 class="task-title"><span th:text="${task.title}"></span></h2>
+    </div>
+
+    <div class="task-dates">
+      <p id="deadlineId"><strong>Deadline: </strong><span th:text="${task.deadline}"></span></p>
+    </div>
+
+    <p id="descriptionId"><span th:text="${task.description}"></span></p>
+  </div>
+</div>
+
+
+<!-- Confirm Remove Dialog -->
+<div id="confirmRemoveDialog" class="confirmDialog" data-taskId="">
+  <div class="confirmDialog-content">
+    <p>Are you sure you want to remove this task ?</p>
+    <button id="confirmRemoveBtn" onclick="removeTask()">Remove</button>
+    <button id="cancelRemoveBtn" onclick="closeConfirmRemoveDialog()">Cancel</button>
+  </div>
+</div>
+
+
+<script th:src="@{/js/comptasks.js}"></script>
+</body>
+
+</html>
