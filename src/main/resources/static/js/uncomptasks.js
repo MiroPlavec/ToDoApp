@@ -1,4 +1,4 @@
-let url = "/tasks";
+let url = "/uncomptasks";
 
 // Show dialog window where user can fill information about task
 function showAddDialog() {
@@ -203,23 +203,3 @@ function closeConfirmCompleteDialog(){
     document.getElementById("confirmCompleteDialog").style.display = "none";
 }
 
-
-document.addEventListener('HTMLSwapped', () => {
-    const taskContainers = document.querySelectorAll('.task-container');
-    taskContainers.forEach(task => {
-        const isAfterDeadline = task.getAttribute('data-afterDeadline');
-        if(isAfterDeadline === "true"){
-            task.style.backgroundColor = "#ffcccc";
-            const taskTitle = task.querySelector(".task-title").textContent;
-            task.querySelector(".task-title").textContent = taskTitle + " (After deadline)";
-            const taskButtons = task.querySelector(".task-buttons");
-            if(taskButtons){
-                taskButtons.style.display = "none";
-            }
-        }
-    });
-})
-
-document.addEventListener('DOMContentLoaded', () =>{
-    document.dispatchEvent(new Event("HTMLSwapped"));
-})

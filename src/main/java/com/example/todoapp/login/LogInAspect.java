@@ -16,7 +16,7 @@ public class LogInAspect {
     }
 
 
-    @Around("execution(String com.example.todoapp.task.TaskController.*(..))")
+    @Around("execution(String com.example.todoapp.uncompletedtask.TaskController.*(..))")
     public String checkLogin(ProceedingJoinPoint joinPoint) throws Throwable {
         if(!logInService.isLogged()){
             return "redirect:/";

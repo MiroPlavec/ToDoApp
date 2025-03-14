@@ -37,7 +37,7 @@ public class ControllerExceptionHandler {
 //    }
 
     @ExceptionHandler(SQLException.class)
-    public ModelAndView databaseExceptionHandler(){
+    public ModelAndView databaseExceptionHandler(SQLException e){
         ModelAndView mav = new ModelAndView();
         mav.addObject("message", "Sorry, it looks like we are not able to connect with database." +
                 "\nPlease try it later.");
