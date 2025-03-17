@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do it ! Uncompleted tasks</title>
+    <link rel="stylesheet" th:href="@{/css/uncomptasks.css}">
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+    <a href="/home">Home</a>
+    <a href="/uncomptasks">Uncompleted tasks</a>
+    <a href="/comptasks">Completed tasks</a>
+    <a href="/afterdeadline">After deadline tasks</a>
+    <a href="/logout">Log out</a>
+</div>
+
+
+<!-- Add Task Button -->
+<button class="add-task-btn" title="Add new task" onclick="showAddDialog()">+</button>
+
+<!-- Task List -->
+<div th:each="task: ${tasks}" id="taskList">
+    <div class="task-container" th:id="${task.taskId}" th:data-afterDeadline="${task.isAfterDeadline}">
+
+        <button class="remove-btn" th:data-id="${task.taskId}" onclick="openConfirmRemoveDialog(this)">✖</button>
+        <div class="task-header">
+            <h2 class="task-title"><span th:text="${task.title}"></span></h2>
+        </div>
+
+        <div class="task-dates">
+            <p id="deadlineId"><strong>Deadline: </strong><span th:text="${task.deadline}"></span></p>
+        </div>
+
+        <p id="descriptionId"><span th:text="${task.description}"></span></p>
+
+        <div class="task-buttons">
+            <button class="edit-btn" th:data-id="${task.taskId}" onclick="showEditDialog(this)">Edit Task</button>
+            <button id="btn" class="complete-btn" th:data-id="${task.taskId}" onclick="openConfirmCompleteDialog(this)">Completed</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Task Dialog -->
+<div id="addTaskDialog" class="addDialog" data-id="-1">
+    <form id="addTaskForm" class="addDialog-content">
+        <h2>Add new task</h2>
+
+        <!-- Title -->
+        <label>Title</label>
+        <input name="title" type="text">
+        <p id="titleError" class="error-message">Title is required!</p>
+
+        <!-- Description -->
+        <label>Description</label>
+        <textarea name="description" class="fixed-textarea"></textarea>
+
+        <!-- Deadline -->
+        <label>Deadline Date</label>
+        <input name="deadlineDate" id="deadlineInput" type="date">
+        <p id="deadlineError" class="error-message">Deadline date is required!</p>
+
+        <!-- Form Buttons -->
+        <div id="dialog-btns">
+            <button type="button" onclick="closeAddDialog()">Close</button>
+            <button id="dialogSubmitBtn" type="button" onclick="submitForm()">Create</button>
+            <button id="dialogEditBtn"  type="button" onclick="editTask()">Edit</button>
+        </div>
+    </form>
+</div>
+
+
+<!-- Confirm Remove Dialog -->
+<div id="confirmRemoveDialog" class="confirmDialog" data-taskId="">
+    <div class="confirmDialog-content">
+        <p>Are you sure you want to remove this task ?</p>
+        <button id="confirmRemoveBtn" onclick="removeTask()">Remove</button>
+        <button id="cancelRemoveBtn" onclick="closeConfirmRemoveDialog()">Cancel</button>
+    </div>
+</div>
+
+<!-- Confirm Completed Dialog -->
+<div id="confirmCompleteDialog" class="confirmDialog" data-taskId="">
+    <div class="confirmDialog-content">
+        <p>Are you sure you want to mark this task as completed ?</p>
+        <button id="confirmCompleteBtn" onclick="completeTask()">Complete</button>
+        <button id="cancelCompleteBtn" onclick="closeConfirmCompleteDialog()">Cancel</button>
+    </div>
+</div>
+
+<script th:src="@{/js/uncomptasks.js}"></script>
+</body>
+
+</html>

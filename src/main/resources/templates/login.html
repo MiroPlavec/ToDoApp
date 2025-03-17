@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="form-container">
+    <form id="form" autocomplete="off">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="sendUserData()">Log in</button>
+
+    </form>
+</div>
+
+<script th:src="@{/js/login.js}"></script>
+</body>
+</html>
