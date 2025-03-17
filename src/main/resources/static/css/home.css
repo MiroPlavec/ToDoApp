@@ -27,3 +27,13 @@
 .sidebar a:hover {
     background-color: #28a745;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    gap: 20px;
+    margin-left: 100px;
+}

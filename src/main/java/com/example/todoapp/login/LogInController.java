@@ -22,9 +22,8 @@ public class LogInController {
 
     @GetMapping
     public String showLogInScreen(){
-        //throw new MyException("Pokus");
         if(logInService.isLogged()){
-            return "redirect:/tasks";
+            return "redirect:/home";
         }
         return "login.html";
     }
@@ -35,7 +34,7 @@ public class LogInController {
         boolean isLogged = logInService.logIn(loginRequest.getUsername(), loginRequest.getPassword());
         if(isLogged){
             // send user path when to redirect if credential are correct
-            return ResponseEntity.ok(Collections.singletonMap("redirect", "/tasks"));
+            return ResponseEntity.ok(Collections.singletonMap("redirect", "/home"));
         }
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)

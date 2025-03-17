@@ -16,7 +16,10 @@ public class LogInAspect {
     }
 
 
-    @Around("execution(String com.example.todoapp.uncompletedtask.TaskController.*(..))")
+    @Around("execution(String com.example.todoapp.afterdeadlinetask.AfterDeadlineTaskController.*(..)) || " +
+            "execution(String com.example.todoapp.completedtask.CompletedTaskController.*(..)) || " +
+            "execution(String com.example.todoapp.uncompletedtask.UnCompletedTaskController.*(..)) || " +
+            "execution(String com.example.todoapp.home.HomeController.*(..))")
     public String checkLogin(ProceedingJoinPoint joinPoint) throws Throwable {
         if(!logInService.isLogged()){
             return "redirect:/";
