@@ -24,6 +24,10 @@ public class LogInService {
         return isLogged;
     }
 
+    public void logOut(){
+        isLogged = false;
+    }
+
     public boolean isLogged() {
         return isLogged;
     }

@@ -27,7 +27,7 @@ public class AfterDeadlineTaskController {
         return "afterdeadlinetasks.html";
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public String deleteAfterDeadlineTasks(@PathVariable String id, Model model){
         List<Task> afterDeadlineTasks = afterDeadlineTaskService.removeAfterDeadlineTasks(id);
         model.addAttribute("tasks", afterDeadlineTasks);
